@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 # @Author: prateek
 # @Date:   2021-02-19 22:46:31
-# @Last Modified by:   prateek
-# @Last Modified time: 2021-02-19 22:57:57
+# @Last Modified by:   prateekagrawaliiit
+# @Last Modified time: 2021-02-19 23:12:19
 
 import streamlit as st
 import numpy as np 
@@ -19,7 +19,7 @@ st.write("""
 
 sequence_input = "0.24,0.2,0.16,0.12,0.08,0.04,0.12,0.04\n0.22,0.23,0.16,0.13,0.11,0.08,0.05,0.02"
 
-sequence = st.text_area("Inputs H1 and H2", sequence_input, height=250)
+sequence = st.text_area("Inputs H1 and H2", sequence_input, height=100)
 sequence = sequence.splitlines()
 
 H1 = [float(x) for x in sequence[0].split(',')]
