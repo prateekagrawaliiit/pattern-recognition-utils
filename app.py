@@ -2,7 +2,7 @@
 # @Author: prateek
 # @Date:   2021-02-19 22:46:31
 # @Last Modified by:   prateekagrawaliiit
-# @Last Modified time: 2021-02-20 15:14:50
+# @Last Modified time: 2021-02-21 20:09:05
 
 
 from math import*
@@ -46,14 +46,27 @@ def quad_form_dist(V,A):
 def cosine_distance(H1,H2):
     return 1 - (np.dot(H1,H2)/(np.linalg.norm(H1)*(np.linalg.norm(H2))))
 
+def mahalanabus_distance(hq,A):
+    mean_vector = np.mean(A,axis=0)
+    Z=[]
+    for row in A:
+        # row
+        x=[]
+        for i in range(len(row)):
+            x.append(float(row[i]-mean_vector[i]))
+        Z.append(x)
 
-
-
+    Z = np.asarray(Z)
+    sigma = np.matmul(Z.T,Z)
+    sigma = sigma/(len(Z)-1)    
+    sigma_inv = np.linalg.inv(sigma) 
+    V = hq - mean_vector
+    dist = quad_form_dist(V,sigma_inv)
+    return np.sqrt(dist)
 
 st.write("""
         # PATTERN RECOGNITION HELPER UTILS
         """)
-
 st.write("""
         ## Metric Distance and Proximity Measures for Normalized Histograms
         """)
@@ -63,28 +76,22 @@ st.write("""
          P-value - 2""")
 
 sequence_input = "1,2,3,4,5\n6,7,8,9,10\n2"
-
 sequence = st.text_area("Inputs H1 and H2", sequence_input, height=100)
 sequence = sequence.splitlines()
-
 H1 = [float(x) for x in sequence[0].split(',')]
 H2 = [float(x) for x in sequence[1].split(',')]
 p_value = int(sequence[2])
 minkowski_btn = st.button('Calculate Metric Distances')
-
 if minkowski_btn:
     st.write('The Minkowski Distance is {}'.format(minkowski_distance(H1,H2,p_value)))
     st.write('The Euclidean Distance is {}'.format(minkowski_distance(H1,H2,2)))
     st.write('The Manhattan Distance is {}'.format(minkowski_distance(H1,H2,1)))
     st.write('The L (infinity) Norm Chybyshev Distance is {}'.format(L_p_infinite(H1,H2)))
     st.write('The L (-infinity) Norm is {}'.format(L_n_infinite(H1,H2)))
-
-
 st.header('Quadratic Form Distance')
 
 query_vector = st.text_input("Query Vector Hq", '1,2,3')
 mean_vector = st.text_input("Mean Vector Ht", '1,0,0')
-
 query_vector = [float(x) for x in query_vector.split(',')]
 mean_vector =  [float(x) for x in mean_vector.split(',')]
 V=[]
@@ -99,6 +106,26 @@ quad_form_dist_btn = st.button('Calculate Quadratic Form Distance')
 
 if quad_form_dist_btn:
     st.write('The Quadratic Form Distance is {}'.format(quad_form_dist(V,A)))
+
+
+
+st.header('Mahalanabus Distance')
+
+vector_query = st.text_input("Query Vector", '66,640,44')
+vector_query = [float(x) for x in vector_query.split(',')]
+V=[]
+data_frame = st.text_area('Enter the dataframe','64,580,29\n66,570,33\n68,590,37\n69,660,46\n73,600,55')
+tdata_frame_lines = data_frame.splitlines()
+A = np.asarray([np.asarray([float(y) for y in x.split(',')]) for x in tdata_frame_lines])
+
+
+mahalana_dist_btn = st.button('Calculate Mahalanabus Distance')
+
+if mahalana_dist_btn:
+    st.write('The Mahalanabus Distance is {}'.format(mahalanabus_distance(vector_query,A)))
+
+
+
 
 st.write("""
         ## Non-Metric Distance and Proximity Measures for Normalized Histograms
